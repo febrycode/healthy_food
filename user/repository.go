@@ -9,5 +9,4 @@ import (
 // Repository represent the article's repository contract
 type Repository interface {
 	GetByEmail(ctx context.Context, email string) (*models.User, error)
-	Store(ctx context.Context, user *models.User) error
 }

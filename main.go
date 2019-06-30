@@ -1,16 +1,19 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"net/url"
 	"os"
-
-	"github.com/labstack/echo"
+	"time"
 
 	"github.com/febrycode/healthy_food/middleware"
+	_userHttpDeliver "github.com/febrycode/healthy_food/user/delivery/http"
+	_userRepo "github.com/febrycode/healthy_food/user/repository"
+	_userUsecase "github.com/febrycode/healthy_food/user/usecase"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
+	"github.com/labstack/echo"
 	"github.com/spf13/viper"
 )
 
@@ -39,7 +42,7 @@ func main() {
 	val.Add("loc", "Asia/Jakarta")
 
 	dsn := fmt.Sprintf("%s", connection)
-	dbConn, err := sql.Open(`mysql`, dsn)
+	dbConn, err := sqlx.Open("mysql", dsn)
 	if err != nil && viper.GetBool("debug") {
 		fmt.Println(err)
 	}
@@ -61,4 +64,11 @@ func main() {
 	middleware := middleware.InitMiddleware()
 	e.Use(middleware.CORS)
 
+	userRepository := _userRepo.NewMysqlUserRepository(dbConn)
+
+	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
+	userUsecase := _userUsecase.NewUserUsecase(userRepository, timeoutContext)
+	_userHttpDeliver.NewUserHandler(e, userUsecase)
+
+	log.Fatal(e.Start(viper.GetString("server.address")))
 }
