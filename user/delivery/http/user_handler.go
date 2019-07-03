@@ -11,15 +11,16 @@ import (
 
 // UserHandler represent the httphandler for user
 type UserHandler struct {
-	UserUsecase user.Usecase
+	userUsecase user.Usecase
 }
 
 // NewUserHandler will initialize the user/ resources endpoint
 func NewUserHandler(e *echo.Echo, userUsecase user.Usecase) {
 	handler := &UserHandler{
-		UserUsecase: userUsecase,
+		userUsecase: userUsecase,
 	}
 
+	e.POST("/register", handler.Register)
 	e.POST("/login", handler.Login)
 }
 
@@ -37,11 +38,30 @@ func (u *UserHandler) Login(c echo.Context) error {
 		return err
 	}
 
-	user, err := u.UserUsecase.GetUserByEmail(ctx, userParam.Email)
+	user, err := u.userUsecase.GetUserByEmail(ctx, userParam.Email)
 	if err != nil {
 		return err
 	}
 
 	return c.JSON(http.StatusOK, user)
 
+}
+
+func (u *UserHandler) Register(c echo.Context) (err error) {
+	ctx := c.Request().Context()
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	userParam := &models.User{}
+	if err = c.Bind(userParam); err != nil {
+		return err
+	}
+
+	err = u.userUsecase.CreateUser(ctx, userParam)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

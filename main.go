@@ -41,7 +41,7 @@ func main() {
 	val.Add("parseTime", "1")
 	val.Add("loc", "Asia/Jakarta")
 
-	dsn := fmt.Sprintf("%s", connection)
+	dsn := fmt.Sprintf("%s?%s", connection, val.Encode())
 	dbConn, err := sqlx.Open("mysql", dsn)
 	if err != nil && viper.GetBool("debug") {
 		fmt.Println(err)

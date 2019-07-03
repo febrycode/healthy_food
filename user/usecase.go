@@ -8,5 +8,6 @@ import (
 
 // Usecase represent the user's usecase
 type Usecase interface {
-	GetUserByEmail(ctx context.Context, email string) (*models.User, error)
+	GetUserByEmail(ctx context.Context, email string) (models.User, error)
+	CreateUser(ctx context.Context, userData *models.User) error
 }

@@ -19,57 +19,22 @@ func NewMysqlUserRepository(Conn *sqlx.DB) user.Repository {
 	return &mysqlUserRepository{Conn}
 }
 
-func (m *mysqlUserRepository) fetch(ctx context.Context, query string, args ...interface{}) ([]*models.User, error) {
-	rows, err := m.Conn.QueryContext(ctx, query, args...)
-	if err != nil {
-		logrus.Error(err)
-		return nil, err
-	}
-
-	defer func() {
-		err := rows.Close()
-		if err != nil {
-			logrus.Error(err)
-		}
-	}()
-
-	result := make([]*models.User, 0)
-	for rows.Next() {
-		t := new(models.User)
-		err = rows.Scan(
-			&t.ID,
-			&t.Email,
-			&t.Name,
-			&t.AvatarURL,
-			&t.Address,
-			&t.Bio,
-			&t.CreatedAt,
-			&t.UpdatedAt,
-		)
-
-		if err != nil {
-			logrus.Error(err)
-			return nil, err
-		}
-
-		result = append(result, t)
-	}
-
-	return result, nil
-}
-
-func (m *mysqlUserRepository) GetByEmail(ctx context.Context, title string) (res *models.User, err error) {
-	list, err := m.fetch(ctx, user.QueryGetUserByEmail, title)
+func (m *mysqlUserRepository) GetByEmail(ctx context.Context, email string) (res models.User, err error) {
+	err = m.Conn.GetContext(ctx, &res, user.QueryGetUserByEmail, email)
 	if err != nil {
 		logrus.Error(err)
 		return res, err
 	}
 
-	if len(list) > 0 {
-		res = list[0]
-	} else {
-		return nil, models.ErrNotFound
+	return res, nil
+}
+
+func (m *mysqlUserRepository) CreateUser(ctx context.Context, userData *models.User) error {
+	_, err := m.Conn.NamedQuery(user.QueryInsertUser, &userData)
+	if err != nil {
+		logrus.Error(err)
+		return err
 	}
 
-	return res, nil
+	return nil
 }
