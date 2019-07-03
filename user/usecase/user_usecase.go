@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/febrycode/healthy_food/models"
@@ -39,8 +38,6 @@ func (uc *Usecase) CreateUser(ctx context.Context, userData *models.User) error 
 	defer cancel()
 
 	userData.CreatedAt = util.GetTimeNow()
-
-	fmt.Println(userData)
 
 	err := uc.userRepository.CreateUser(ctx, userData)
 	if err != nil {
