@@ -11,16 +11,16 @@ import (
 )
 
 type mysqlUserRepository struct {
-	Conn *sqlx.DB
+	DB *sqlx.DB
 }
 
 // NewMysqlUserRepository will create an object that represent the user.Repository interface
-func NewMysqlUserRepository(Conn *sqlx.DB) user.Repository {
-	return &mysqlUserRepository{Conn}
+func NewMysqlUserRepository(DB *sqlx.DB) user.Repository {
+	return &mysqlUserRepository{DB}
 }
 
 func (m *mysqlUserRepository) GetByEmail(ctx context.Context, email string) (res models.User, err error) {
-	err = m.Conn.GetContext(ctx, &res, user.QueryGetUserByEmail, email)
+	err = m.DB.GetContext(ctx, &res, user.QueryGetUserByEmail, email)
 	if err != nil {
 		logrus.Error(err)
 		return res, err
@@ -30,7 +30,7 @@ func (m *mysqlUserRepository) GetByEmail(ctx context.Context, email string) (res
 }
 
 func (m *mysqlUserRepository) CreateUser(ctx context.Context, userData *models.User) error {
-	_, err := m.Conn.NamedQuery(user.QueryInsertUser, &userData)
+	_, err := m.DB.NamedQuery(user.QueryInsertUser, &userData)
 	if err != nil {
 		logrus.Error(err)
 		return err
