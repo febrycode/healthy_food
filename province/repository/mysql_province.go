@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/febrycode/healthy_food/models"
 	"github.com/febrycode/healthy_food/province"
@@ -23,7 +22,6 @@ func NewMysqlProvinceRepository(DB *sqlx.DB) province.Repository {
 func (m *mysqlProvinceRepository) GetAllProvince(ctx context.Context) (result []models.Province, err error) {
 	err = m.DB.SelectContext(ctx, &result, province.QueryGetAllProvince)
 	if err != nil {
-		fmt.Println(err)
 		return []models.Province{}, errors.AddTrace(err)
 	}
 
