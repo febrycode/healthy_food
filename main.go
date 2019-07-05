@@ -7,6 +7,10 @@ import (
 	"os"
 	"time"
 
+	_foodHttpDeliver "github.com/febrycode/healthy_food/food/delivery/http"
+	_foodRepo "github.com/febrycode/healthy_food/food/repository"
+	_foodUsecase "github.com/febrycode/healthy_food/food/usecase"
+	_foodDetailRepo "github.com/febrycode/healthy_food/food_detail/repository"
 	"github.com/febrycode/healthy_food/middleware"
 	_userHttpDeliver "github.com/febrycode/healthy_food/user/delivery/http"
 	_userRepo "github.com/febrycode/healthy_food/user/repository"
@@ -64,11 +68,16 @@ func main() {
 	middleware := middleware.InitMiddleware()
 	e.Use(middleware.CORS)
 
-	userRepository := _userRepo.NewMysqlUserRepository(dbConn)
-
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
+
+	userRepository := _userRepo.NewMysqlUserRepository(dbConn)
 	userUsecase := _userUsecase.NewUserUsecase(userRepository, timeoutContext)
 	_userHttpDeliver.NewUserHandler(e, userUsecase)
+
+	foodRepository := _foodRepo.NewMysqlFoodRepository(dbConn)
+	foodDetailRepository := _foodDetailRepo.NewMysqlFoodDetailRepository(dbConn)
+	foodUsecase := _foodUsecase.NewFoodUsecase(foodRepository, foodDetailRepository, timeoutContext)
+	_foodHttpDeliver.NewFoodHandler(e, foodUsecase)
 
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }

@@ -2,7 +2,7 @@ package food
 
 const (
 	QueryInsertFood = `
-	INSERT INTO user
+	INSERT INTO food
 		(
 			province_id,
 			title,
@@ -14,5 +14,5 @@ const (
 			:title,
 			:created_at
 		);
-	SELECT LAST_INSERT_ID();`
+	`
 )

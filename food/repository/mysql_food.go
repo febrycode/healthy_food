@@ -19,20 +19,16 @@ func NewMysqlFoodRepository(DB *sqlx.DB) food.Repository {
 	}
 }
 
-func (m *mysqlUserRepository) CreateFood(ctx context.Context, foodData *models.Food) (result int64, err error) {
-	rows, err := m.DB.NamedQuery(food.QueryInsertFood, foodData)
+func (m *mysqlUserRepository) CreateFood(ctx context.Context, foodData *models.Food) (int64, error) {
+	res, err := m.DB.NamedExec(food.QueryInsertFood, foodData)
 	if err != nil {
 		return 0, errors.AddTrace(err)
 	}
 
-	defer rows.Close()
-
-	for rows.Next() {
-		err = rows.Scan(&result)
-		if err != nil {
-			return 0, errors.AddTrace(err)
-		}
+	result, err := res.LastInsertId()
+	if err != nil {
+		return 0, errors.AddTrace(err)
 	}
 
-	return 0, nil
+	return result, nil
 }

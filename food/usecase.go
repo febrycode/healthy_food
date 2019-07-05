@@ -7,5 +7,5 @@ import (
 )
 
 type Usecase interface {
-	CreateFood(ctx context.Context, foodData *models.Food) error
+	CreateFood(ctx context.Context, foodParam *models.FoodRequest) error
 }
