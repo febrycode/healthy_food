@@ -44,7 +44,6 @@ func (u *UserHandler) Login(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, user)
-
 }
 
 func (u *UserHandler) Register(c echo.Context) (err error) {
