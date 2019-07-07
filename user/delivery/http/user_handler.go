@@ -20,6 +20,7 @@ func NewUserHandler(e *echo.Echo, userUsecase user.Usecase) {
 		userUsecase: userUsecase,
 	}
 
+	e.GET("health_check", handler.HealthCheck)
 	e.POST("/register", handler.Register)
 	e.POST("/login", handler.Login)
 }
@@ -63,4 +64,8 @@ func (u *UserHandler) Register(c echo.Context) (err error) {
 	}
 
 	return nil
+}
+
+func (u *UserHandler) HealthCheck(c echo.Context) error {
+	return c.JSON(http.StatusOK, "success")
 }
