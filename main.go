@@ -11,6 +11,9 @@ import (
 	_foodRepo "github.com/febrycode/healthy_food/food/repository"
 	_foodUsecase "github.com/febrycode/healthy_food/food/usecase"
 	_foodDetailRepo "github.com/febrycode/healthy_food/food_detail/repository"
+	_imageHttpDeliver "github.com/febrycode/healthy_food/image/delivery/http"
+	_imageRepo "github.com/febrycode/healthy_food/image/repository"
+	_imageUsecase "github.com/febrycode/healthy_food/image/usecase"
 	"github.com/febrycode/healthy_food/middleware"
 	_provinceHttpDeliver "github.com/febrycode/healthy_food/province/delivery/http"
 	_provinceRepo "github.com/febrycode/healthy_food/province/repository"
@@ -85,6 +88,10 @@ func main() {
 	provinceRepository := _provinceRepo.NewMysqlProvinceRepository(dbConn)
 	provinceUsecase := _provinceUsecase.NewProvinceUsecase(provinceRepository, timeoutContext)
 	_provinceHttpDeliver.NewProvinceHandler(e, provinceUsecase)
+
+	imageRepository := _imageRepo.NewMysqlImageRepository(dbConn)
+	imageUsecase := _imageUsecase.NewImageUsecase(imageRepository, timeoutContext)
+	_imageHttpDeliver.NewImageHandler(e, imageUsecase)
 
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }

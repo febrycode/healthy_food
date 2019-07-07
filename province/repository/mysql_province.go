@@ -6,7 +6,6 @@ import (
 	"github.com/febrycode/healthy_food/models"
 	"github.com/febrycode/healthy_food/province"
 	"github.com/jmoiron/sqlx"
-	"github.com/tokopedia/tokopoints/errors"
 )
 
 type mysqlProvinceRepository struct {
@@ -22,7 +21,7 @@ func NewMysqlProvinceRepository(DB *sqlx.DB) province.Repository {
 func (m *mysqlProvinceRepository) GetAllProvince(ctx context.Context) (result []models.Province, err error) {
 	err = m.DB.SelectContext(ctx, &result, province.QueryGetAllProvince)
 	if err != nil {
-		return []models.Province{}, errors.AddTrace(err)
+		return []models.Province{}, err
 	}
 
 	return result, nil

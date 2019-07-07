@@ -6,7 +6,6 @@ import (
 	"github.com/febrycode/healthy_food/food"
 	"github.com/febrycode/healthy_food/models"
 	"github.com/jmoiron/sqlx"
-	"github.com/tokopedia/tokopoints/errors"
 )
 
 type mysqlUserRepository struct {
@@ -22,12 +21,12 @@ func NewMysqlFoodRepository(DB *sqlx.DB) food.Repository {
 func (m *mysqlUserRepository) CreateFood(ctx context.Context, foodData *models.Food) (int64, error) {
 	res, err := m.DB.NamedExec(food.QueryInsertFood, foodData)
 	if err != nil {
-		return 0, errors.AddTrace(err)
+		return 0, err
 	}
 
 	result, err := res.LastInsertId()
 	if err != nil {
-		return 0, errors.AddTrace(err)
+		return 0, err
 	}
 
 	return result, nil
