@@ -20,7 +20,7 @@ func NewProvinceHandler(e *echo.Echo, provinceUsecase province.Usecase) {
 	}
 
 	// Restricted group
-	r := e.Group("/provinces")
+	r := e.Group("/province")
 
 	// Configure middleware with the custom claims type
 	config := middleware.JWTConfig{

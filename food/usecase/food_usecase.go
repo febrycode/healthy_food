@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/febrycode/healthy_food/food"
@@ -29,6 +30,7 @@ func (uc *Usecase) CreateFood(ctx context.Context, foodParam *models.FoodRequest
 
 	foodID, err := uc.foodRepository.CreateFood(ctx, food.BuilderFoodParamToFood(foodParam))
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 

@@ -8,6 +8,7 @@ import (
 
 func BuilderFoodParamToFood(foodParam *models.FoodRequest) *models.Food {
 	return &models.Food{
+		UserID:     foodParam.UserID,
 		ProvinceID: foodParam.ProvinceID,
 		Title:      foodParam.Title,
 		CreatedAt:  util.GetTimeNow(),

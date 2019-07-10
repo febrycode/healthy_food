@@ -57,8 +57,8 @@ func (u *UserHandler) Login(c echo.Context) error {
 
 	// Set custom claims
 	claims := &middleware.JwtCustomClaims{
-		user.ID,
-		jwt.StandardClaims{
+		UserID: user.ID,
+		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
 		},
 	}
@@ -70,7 +70,7 @@ func (u *UserHandler) Login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
 	}
 
-	return c.JSON(http.StatusOK, models.ResponseJSON(http.StatusOK, t))
+	return c.JSON(http.StatusOK, models.ResponseToken(http.StatusOK, t))
 }
 
 func (u *UserHandler) Register(c echo.Context) (err error) {

@@ -3,9 +3,12 @@ package http
 import (
 	"context"
 
+	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/febrycode/healthy_food/food"
+	middlewareCustom "github.com/febrycode/healthy_food/middleware"
 	"github.com/febrycode/healthy_food/models"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 type FoodHandler struct {
@@ -17,7 +20,18 @@ func NewFoodHandler(e *echo.Echo, foodUsecase food.Usecase) {
 		foodUsecase: foodUsecase,
 	}
 
-	e.POST("/food", handler.CreateFood)
+	// Restricted group
+	r := e.Group("/food")
+
+	// Configure middleware with the custom claims type
+	config := middleware.JWTConfig{
+		Claims:     &middlewareCustom.JwtCustomClaims{},
+		SigningKey: []byte("secret"),
+	}
+
+	r.Use(middleware.JWTWithConfig(config))
+	r.POST("", handler.CreateFood)
+
 }
 
 func (f *FoodHandler) CreateFood(c echo.Context) (err error) {
@@ -31,6 +45,10 @@ func (f *FoodHandler) CreateFood(c echo.Context) (err error) {
 		return err
 	}
 
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(*middlewareCustom.JwtCustomClaims)
+
+	foodParam.UserID = claims.UserID
 	err = f.foodUsecase.CreateFood(ctx, foodParam)
 	if err != nil {
 		return err
