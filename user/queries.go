@@ -5,6 +5,7 @@ const (
 		SELECT
 			id,
 			email,
+			password,
 			name,
 			avatar_url,
 			address,
@@ -18,6 +19,7 @@ const (
 		INSERT INTO user
 			(
 				email,
+				password,
 				name,
 				avatar_url,
 				address,
@@ -27,6 +29,7 @@ const (
 		VALUES 
 			(
 				:email,
+				:password,
 				:name,
 				:avatar_url,
 				:address,

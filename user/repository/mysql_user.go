@@ -21,7 +21,7 @@ func NewMysqlUserRepository(DB *sqlx.DB) user.Repository {
 
 func (m *mysqlUserRepository) GetByEmail(ctx context.Context, email string) (res models.User, err error) {
 	err = m.DB.GetContext(ctx, &res, user.QueryGetUserByEmail, email)
-	if err != nil {
+	if err != nil && !models.IsErrorNoRows(err) {
 		logrus.Error(err)
 		return res, err
 	}

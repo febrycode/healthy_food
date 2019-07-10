@@ -1,6 +1,9 @@
 package models
 
-import "errors"
+import (
+	"database/sql"
+	"errors"
+)
 
 var (
 	// ErrInternalServerError will throw if any the Internal Server Error happen
@@ -12,3 +15,7 @@ var (
 	// ErrBadParamInput will throw if the given request-body or params is not valid
 	ErrBadParamInput = errors.New("Given Param is not valid")
 )
+
+func IsErrorNoRows(err error) bool {
+	return err.Error() == sql.ErrNoRows.Error()
+}
