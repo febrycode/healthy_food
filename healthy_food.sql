@@ -24,6 +24,7 @@ DROP TABLE IF EXISTS `food`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `food` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
   `province_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `created_at` datetime DEFAULT NULL,
@@ -31,7 +32,7 @@ CREATE TABLE `food` (
   PRIMARY KEY (`id`),
   KEY `fk_province` (`province_id`),
   CONSTRAINT `food_ibfk_1` FOREIGN KEY (`province_id`) REFERENCES `province` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +41,7 @@ CREATE TABLE `food` (
 
 LOCK TABLES `food` WRITE;
 /*!40000 ALTER TABLE `food` DISABLE KEYS */;
+INSERT INTO `food` VALUES (1,12,1,'Rendang','2019-07-10 21:47:13',NULL);
 /*!40000 ALTER TABLE `food` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -67,6 +69,7 @@ CREATE TABLE `food_detail` (
 
 LOCK TABLES `food_detail` WRITE;
 /*!40000 ALTER TABLE `food_detail` DISABLE KEYS */;
+INSERT INTO `food_detail` VALUES (1,1,1,'Bikin gemuk','2019-07-10 21:47:13',NULL),(2,1,1,'Segar','2019-07-10 21:47:13',NULL),(3,2,1,'Kolesterol','2019-07-10 21:47:13',NULL),(4,2,1,'Pemicu jantung','2019-07-10 21:47:13',NULL);
 /*!40000 ALTER TABLE `food_detail` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -134,6 +137,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `avatar_url` varchar(255) DEFAULT NULL,
   `address` text,
@@ -141,7 +145,7 @@ CREATE TABLE `user` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,7 +154,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'test@gmail.com','test 1','https://www.w3schools.com/w3images/avatar2.png','Lorem ipsum','Lorem ipsum','2019-07-03 22:57:41',NULL);
+INSERT INTO `user` VALUES (12,'test@gmail.com','$2a$04$.ND6D6GXosUTgPEesSzuKu2xuITL4vPFk2BI9xVw8FH/ytQd8hFEa','John Doe','','','','2019-07-09 21:47:59',NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -163,4 +167,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-06  7:58:27
+-- Dump completed on 2019-07-12  5:23:25
