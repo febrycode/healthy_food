@@ -7,7 +7,9 @@ import (
 	"os"
 
 	"github.com/febrycode/healthy_food/image"
+	middlewareCustom "github.com/febrycode/healthy_food/middleware"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 // ImageHandler represent the httphandler for user
@@ -21,7 +23,17 @@ func NewImageHandler(e *echo.Echo, imageUsecase image.Usecase) {
 		imageUsecase: imageUsecase,
 	}
 
-	e.POST("/image", handler.CreateImage)
+	// Restricted group
+	r := e.Group("/image")
+
+	// Configure middleware with the custom claims type
+	config := middleware.JWTConfig{
+		Claims:     &middlewareCustom.JwtCustomClaims{},
+		SigningKey: []byte("secret"),
+	}
+
+	r.Use(middleware.JWTWithConfig(config))
+	r.POST("", handler.CreateImage)
 }
 
 func (i *ImageHandler) CreateImage(c echo.Context) (err error) {
