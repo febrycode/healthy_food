@@ -1,9 +1,9 @@
 package food
 
 import (
-	"github.com/febrycode/healthy_food/common/enums/fooddetailreferencetype"
-	"github.com/febrycode/healthy_food/models"
-	"github.com/febrycode/healthy_food/util"
+	"github.com/fsetiawan29/healthy_food/common/enums/fooddetailreferencetype"
+	"github.com/fsetiawan29/healthy_food/models"
+	"github.com/fsetiawan29/healthy_food/util"
 )
 
 func BuilderFoodParamToFood(foodParam *models.FoodRequest) *models.Food {

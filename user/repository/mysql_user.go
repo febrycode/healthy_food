@@ -6,8 +6,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 
-	"github.com/febrycode/healthy_food/models"
-	"github.com/febrycode/healthy_food/user"
+	"github.com/fsetiawan29/healthy_food/models"
+	"github.com/fsetiawan29/healthy_food/user"
 )
 
 type mysqlUserRepository struct {

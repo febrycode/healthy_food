@@ -4,9 +4,9 @@ import (
 	"context"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	"github.com/febrycode/healthy_food/food"
-	middlewareCustom "github.com/febrycode/healthy_food/middleware"
-	"github.com/febrycode/healthy_food/models"
+	"github.com/fsetiawan29/healthy_food/food"
+	middlewareCustom "github.com/fsetiawan29/healthy_food/middleware"
+	"github.com/fsetiawan29/healthy_food/models"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )

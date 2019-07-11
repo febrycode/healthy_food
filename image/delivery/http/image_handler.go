@@ -6,8 +6,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/febrycode/healthy_food/image"
-	middlewareCustom "github.com/febrycode/healthy_food/middleware"
+	"github.com/fsetiawan29/healthy_food/image"
+	middlewareCustom "github.com/fsetiawan29/healthy_food/middleware"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )

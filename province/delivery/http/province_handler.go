@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	middlewareCustom "github.com/febrycode/healthy_food/middleware"
-	"github.com/febrycode/healthy_food/province"
+	middlewareCustom "github.com/fsetiawan29/healthy_food/middleware"
+	"github.com/fsetiawan29/healthy_food/province"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 )

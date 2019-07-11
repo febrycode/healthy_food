@@ -3,7 +3,7 @@ package user
 import (
 	"context"
 
-	"github.com/febrycode/healthy_food/models"
+	"github.com/fsetiawan29/healthy_food/models"
 )
 
 // Repository represent the article's repository contract

@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	"github.com/febrycode/healthy_food/models"
-	"github.com/febrycode/healthy_food/province"
+	"github.com/fsetiawan29/healthy_food/models"
+	"github.com/fsetiawan29/healthy_food/province"
 	"github.com/jmoiron/sqlx"
 )
 

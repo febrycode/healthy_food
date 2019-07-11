@@ -6,8 +6,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/sirupsen/logrus"
 
-	"github.com/febrycode/healthy_food/food_detail"
-	"github.com/febrycode/healthy_food/models"
+	"github.com/fsetiawan29/healthy_food/food_detail"
+	"github.com/fsetiawan29/healthy_food/models"
 )
 
 type mysqlFoodDetailRepository struct {

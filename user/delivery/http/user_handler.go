@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/febrycode/healthy_food/middleware"
-	"github.com/febrycode/healthy_food/models"
-	"github.com/febrycode/healthy_food/user"
+	"github.com/fsetiawan29/healthy_food/middleware"
+	"github.com/fsetiawan29/healthy_food/models"
+	"github.com/fsetiawan29/healthy_food/user"
 	"github.com/labstack/echo"
 )
 
