@@ -38,3 +38,23 @@ func (m *mysqlUserRepository) CreateUser(ctx context.Context, userData *models.U
 
 	return nil
 }
+
+func (m *mysqlUserRepository) GetByUserID(ctx context.Context, userID int64) (res models.User, err error) {
+	err = m.DB.GetContext(ctx, &res, user.QueryGetUserByUserID, userID)
+	if err != nil && !models.IsErrorNoRows(err) {
+		logrus.Error(err)
+		return res, err
+	}
+
+	return res, nil
+}
+
+func (m *mysqlUserRepository) UpdateUser(ctx context.Context, userData *models.User) error {
+	_, err := m.DB.NamedQuery(user.QueryUpdateUser, &userData)
+	if err != nil {
+		logrus.Error(err)
+		return err
+	}
+
+	return nil
+}

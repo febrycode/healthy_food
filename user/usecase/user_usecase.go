@@ -33,6 +33,18 @@ func (uc *Usecase) GetUserByEmail(ctx context.Context, email string) (models.Use
 	return res, nil
 }
 
+func (uc *Usecase) GetUserByUserID(ctx context.Context, userID int64) (models.User, error) {
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	res, err := uc.userRepository.GetByUserID(ctx, userID)
+	if err != nil {
+		return models.User{}, err
+	}
+
+	return res, nil
+}
+
 func (uc *Usecase) CreateUser(ctx context.Context, userData *models.User) error {
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
 	defer cancel()
@@ -40,6 +52,20 @@ func (uc *Usecase) CreateUser(ctx context.Context, userData *models.User) error 
 	userData.CreatedAt = util.GetTimeNow()
 
 	err := uc.userRepository.CreateUser(ctx, userData)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (uc *Usecase) UpdateUser(ctx context.Context, userData *models.User) error {
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	userData.UpdatedAt = util.GetTimeNow()
+
+	err := uc.userRepository.UpdateUser(ctx, userData)
 	if err != nil {
 		return err
 	}
