@@ -23,6 +23,8 @@ func NewImageHandler(e *echo.Echo, imageUsecase image.Usecase) {
 		imageUsecase: imageUsecase,
 	}
 
+	e.Static("/upload", "upload")
+
 	// Restricted group
 	r := e.Group("/image")
 
