@@ -17,4 +17,14 @@ const (
 				:created_at
 			);
 	`
+
+	QueryGetFoodDetailByFoodID = `
+		SELECT
+			id,
+			reference_type,
+			reference_id,
+			description
+		FROM food_detail
+		WHERE reference_id = ?;
+	`
 )

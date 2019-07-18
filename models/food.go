@@ -20,3 +20,25 @@ type FoodRequest struct {
 	Benefit      []string `json:"benefit"`
 	Disadvantage []string `json:"disadvantage"`
 }
+
+type FoodResponse struct {
+	Food
+	ProvinceName  string         `json:"province_name"`
+	Benefits      []Benefit      `json:"benefits"`
+	Disadvantages []Disadvantage `json:"disadvantages"`
+	Images        []Image        `json:"images"`
+}
+
+type Benefit struct {
+	ID            int64  `json:"id"`
+	ReferenceType int    `json:"reference_type"`
+	ReferenceID   int64  `json:"reference_id"`
+	Description   string `json:"description"`
+}
+
+type Disadvantage struct {
+	ID            int64  `json:"id"`
+	ReferenceType int    `json:"reference_type"`
+	ReferenceID   int64  `json:"reference_id"`
+	Description   string `json:"description"`
+}

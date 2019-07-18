@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"net/http"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/fsetiawan29/healthy_food/food"
@@ -19,6 +20,9 @@ func NewFoodHandler(e *echo.Echo, foodUsecase food.Usecase) {
 	handler := &FoodHandler{
 		foodUsecase: foodUsecase,
 	}
+
+	e.GET("/public/food", handler.GetFood)
+	e.POST("/food", handler.CreateFood)
 
 	// Restricted group
 	r := e.Group("/food")
@@ -55,4 +59,18 @@ func (f *FoodHandler) CreateFood(c echo.Context) (err error) {
 	}
 
 	return nil
+}
+
+func (f *FoodHandler) GetFood(c echo.Context) (err error) {
+	ctx := c.Request().Context()
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	result, err := f.foodUsecase.GetFood(ctx)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, result)
 }

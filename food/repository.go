@@ -8,4 +8,5 @@ import (
 
 type Repository interface {
 	CreateFood(ctx context.Context, foodData *models.Food) (result int64, err error)
+	GetFood(ctx context.Context) ([]models.FoodResponse, error)
 }

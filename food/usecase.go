@@ -8,4 +8,5 @@ import (
 
 type Usecase interface {
 	CreateFood(ctx context.Context, foodParam *models.FoodRequest) error
+	GetFood(ctx context.Context) (result []models.FoodResponse, err error)
 }

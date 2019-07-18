@@ -44,3 +44,15 @@ func (uc *Usecase) CreateFood(ctx context.Context, foodParam *models.FoodRequest
 
 	return nil
 }
+
+func (uc *Usecase) GetFood(ctx context.Context) (result []models.FoodResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	result, err = uc.foodRepository.GetFood(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
