@@ -44,5 +44,18 @@ const (
 			updated_at = :updated_at
 		WHERE
 			name = :name;
-			`
+	`
+
+	QueryGetImageByReferenceID = `
+		SELECT
+			id,
+			reference_type,
+			reference_id,
+			name,
+			description
+		FROM
+			image
+		WHERE
+			reference_id = ?;
+	`
 )

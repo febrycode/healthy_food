@@ -28,3 +28,17 @@ func (m *mysqlFoodDetailRepository) CreateFoodDetail(ctx context.Context, foodDe
 
 	return nil
 }
+
+func (m *mysqlFoodDetailRepository) GetFoodDetailByReferenceID(
+	ctx context.Context,
+	referenceID int64,
+) (foodDetailList []models.FoodDetail, err error) {
+
+	err = m.DB.SelectContext(ctx, &foodDetailList, food_detail.QueryGetFoodDetailByFoodID, referenceID)
+	if err != nil && !models.IsErrorNoRows(err) {
+		logrus.Error(err)
+		return []models.FoodDetail{}, err
+	}
+
+	return foodDetailList, nil
+}
