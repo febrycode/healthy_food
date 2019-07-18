@@ -22,7 +22,6 @@ func NewFoodHandler(e *echo.Echo, foodUsecase food.Usecase) {
 	}
 
 	e.GET("/public/food", handler.GetFood)
-	e.POST("/food", handler.CreateFood)
 
 	// Restricted group
 	r := e.Group("/food")

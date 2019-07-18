@@ -9,6 +9,7 @@ import (
 
 	"github.com/fsetiawan29/healthy_food/image"
 	"github.com/fsetiawan29/healthy_food/models"
+	"github.com/fsetiawan29/healthy_food/util"
 	"github.com/labstack/echo"
 )
 
@@ -66,8 +67,10 @@ func (i *ImageHandler) CreateImage(c echo.Context) (err error) {
 			err = os.Mkdir("./upload", os.ModePerm)
 		}
 
+		fileNameAndUnix := fmt.Sprintf("%d_%s", util.GetTimeNow().Unix(), image.Filename)
+
 		// Destination
-		dst, err := os.Create(fmt.Sprintf("./upload/%s", image.Filename))
+		dst, err := os.Create(fmt.Sprintf("./upload/%s", fileNameAndUnix))
 		if err != nil {
 			return err
 		}
@@ -79,7 +82,7 @@ func (i *ImageHandler) CreateImage(c echo.Context) (err error) {
 		}
 
 		r := c.Request()
-		fileName := c.Scheme() + "://" + r.Host + "/upload/" + image.Filename
+		fileName := fmt.Sprintf("%s://%s/upload/%s", c.Scheme(), r.Host, fileNameAndUnix)
 		err = i.imageUsecase.CreateImage(ctx, &models.Image{
 			Name: fileName,
 		})

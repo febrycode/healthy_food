@@ -18,7 +18,7 @@ func BuilderFoodParamToFood(foodParam *models.FoodRequest) *models.Food {
 func BuilderFoodParamToFoodDetail(referenceID int64, foodParam *models.FoodRequest) []*models.FoodDetail {
 	foodDetailList := make([]*models.FoodDetail, 0)
 
-	for _, benefitData := range foodParam.Benefit {
+	for _, benefitData := range foodParam.Benefits {
 		foodDetailList = append(foodDetailList, &models.FoodDetail{
 			ReferenceType: int(fooddetailreferencetype.BENEFIT),
 			ReferenceID:   referenceID,
@@ -27,7 +27,7 @@ func BuilderFoodParamToFoodDetail(referenceID int64, foodParam *models.FoodReque
 		})
 	}
 
-	for _, disadvantageData := range foodParam.Disadvantage {
+	for _, disadvantageData := range foodParam.Disadvantages {
 		foodDetailList = append(foodDetailList, &models.FoodDetail{
 			ReferenceType: int(fooddetailreferencetype.DISADVANTAGE),
 			ReferenceID:   referenceID,

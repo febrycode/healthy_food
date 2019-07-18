@@ -28,3 +28,23 @@ func (m *mysqlImageRepository) CreateImage(ctx context.Context, imageData *model
 
 	return nil
 }
+
+func (m *mysqlImageRepository) GetImageByName(ctx context.Context, imageName string) (imageData models.Image, err error) {
+	err = m.DB.GetContext(ctx, &imageData, image.QueryGetImageByName, imageName)
+	if err != nil && !models.IsErrorNoRows(err) {
+		logrus.Error(err)
+		return models.Image{}, err
+	}
+
+	return imageData, nil
+}
+
+func (m *mysqlImageRepository) UpdateImage(ctx context.Context, imageData *models.Image) error {
+	_, err := m.DB.NamedQuery(image.QueryUpdateImage, &imageData)
+	if err != nil {
+		logrus.Error(err)
+		return err
+	}
+
+	return nil
+}

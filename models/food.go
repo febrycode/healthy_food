@@ -13,12 +13,13 @@ type Food struct {
 }
 
 type FoodRequest struct {
-	ID           int64    `json:"id"`
-	UserID       int64    `json:"user_id"`
-	ProvinceID   int64    `json:"province_id"`
-	Title        string   `json:"title"`
-	Benefit      []string `json:"benefit"`
-	Disadvantage []string `json:"disadvantage"`
+	ID            int64    `json:"id"`
+	UserID        int64    `json:"user_id"`
+	ProvinceID    int64    `json:"province_id"`
+	Title         string   `json:"title"`
+	Benefits      []string `json:"benefits"`
+	Disadvantages []string `json:"disadvantages"`
+	Images        []string `json:"images"`
 }
 
 type FoodResponse struct {
