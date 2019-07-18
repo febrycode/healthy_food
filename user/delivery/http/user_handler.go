@@ -27,7 +27,7 @@ func NewUserHandler(e *echo.Echo, userUsecase user.Usecase) {
 	e.GET("health_check", handler.HealthCheck)
 	e.POST("/register", handler.Register)
 	e.POST("/login", handler.Login)
- 
+
 	// Restricted group
 	r := e.Group("/profile")
 

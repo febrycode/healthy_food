@@ -14,6 +14,11 @@ type ResponseTokenData struct {
 	Token string `json:"token"`
 }
 
+type ResponseImageData struct {
+	Code   int      `json:"code"`
+	Images []string `json:"images"`
+}
+
 func ResponseJSON(code int, message string) ResponseError {
 	return ResponseError{
 		ResponseErrorData: ResponseErrorData{
@@ -27,5 +32,12 @@ func ResponseToken(code int, token string) ResponseTokenData {
 	return ResponseTokenData{
 		code,
 		token,
+	}
+}
+
+func ResponseImage(code int, images []string) ResponseImageData {
+	return ResponseImageData{
+		Code:   code,
+		Images: images,
 	}
 }

@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 
 	"github.com/fsetiawan29/healthy_food/image"
-	middlewareCustom "github.com/fsetiawan29/healthy_food/middleware"
+	"github.com/fsetiawan29/healthy_food/models"
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 )
 
 // ImageHandler represent the httphandler for user
@@ -25,17 +25,19 @@ func NewImageHandler(e *echo.Echo, imageUsecase image.Usecase) {
 
 	e.Static("/upload", "upload")
 
+	e.POST("/image", handler.CreateImage)
+
 	// Restricted group
-	r := e.Group("/image")
+	// r := e.Group("/image")
 
-	// Configure middleware with the custom claims type
-	config := middleware.JWTConfig{
-		Claims:     &middlewareCustom.JwtCustomClaims{},
-		SigningKey: []byte("secret"),
-	}
+	// // Configure middleware with the custom claims type
+	// config := middleware.JWTConfig{
+	// 	Claims:     &middlewareCustom.JwtCustomClaims{},
+	// 	SigningKey: []byte("secret"),
+	// }
 
-	r.Use(middleware.JWTWithConfig(config))
-	r.POST("", handler.CreateImage)
+	// r.Use(middleware.JWTWithConfig(config))
+	// r.POST("", handler.CreateImage)
 }
 
 func (i *ImageHandler) CreateImage(c echo.Context) (err error) {
@@ -44,17 +46,13 @@ func (i *ImageHandler) CreateImage(c echo.Context) (err error) {
 		ctx = context.Background()
 	}
 
-	reference_id := c.FormValue("reference_id")
-
 	form, err := c.MultipartForm()
 	if err != nil {
 		return err
 	}
 	images := form.File["images"]
 
-	fmt.Println(reference_id)
-
-	fmt.Println(images)
+	var result []string
 
 	for _, image := range images {
 		// Source
@@ -71,7 +69,6 @@ func (i *ImageHandler) CreateImage(c echo.Context) (err error) {
 		// Destination
 		dst, err := os.Create(fmt.Sprintf("./upload/%s", image.Filename))
 		if err != nil {
-			fmt.Println(err)
 			return err
 		}
 		defer dst.Close()
@@ -81,7 +78,17 @@ func (i *ImageHandler) CreateImage(c echo.Context) (err error) {
 			return err
 		}
 
+		r := c.Request()
+		fileName := c.Scheme() + "://" + r.Host + "/upload/" + image.Filename
+		err = i.imageUsecase.CreateImage(ctx, &models.Image{
+			Name: fileName,
+		})
+		if err != nil {
+			return err
+		}
+		result = append(result, fileName)
+
 	}
 
-	return nil
+	return c.JSON(http.StatusCreated, models.ResponseImage(http.StatusCreated, result))
 }
