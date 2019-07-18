@@ -7,24 +7,28 @@ import (
 	"os"
 	"time"
 
-	_foodHttpDeliver "github.com/fsetiawan29/healthy_food/food/delivery/http"
-	_foodRepo "github.com/fsetiawan29/healthy_food/food/repository"
-	_foodUsecase "github.com/fsetiawan29/healthy_food/food/usecase"
-	_foodDetailRepo "github.com/fsetiawan29/healthy_food/food_detail/repository"
-	_imageHttpDeliver "github.com/fsetiawan29/healthy_food/image/delivery/http"
-	_imageRepo "github.com/fsetiawan29/healthy_food/image/repository"
-	_imageUsecase "github.com/fsetiawan29/healthy_food/image/usecase"
-	"github.com/fsetiawan29/healthy_food/middleware"
-	_provinceHttpDeliver "github.com/fsetiawan29/healthy_food/province/delivery/http"
-	_provinceRepo "github.com/fsetiawan29/healthy_food/province/repository"
-	_provinceUsecase "github.com/fsetiawan29/healthy_food/province/usecase"
-	_userHttpDeliver "github.com/fsetiawan29/healthy_food/user/delivery/http"
-	_userRepo "github.com/fsetiawan29/healthy_food/user/repository"
-	_userUsecase "github.com/fsetiawan29/healthy_food/user/usecase"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/labstack/echo"
 	"github.com/spf13/viper"
+
+	"github.com/fsetiawan29/healthy_food/middleware"
+
+	_foodRepo "github.com/fsetiawan29/healthy_food/repository/food"
+	_foodDetailRepo "github.com/fsetiawan29/healthy_food/repository/food_detail"
+	_imageRepo "github.com/fsetiawan29/healthy_food/repository/image"
+	_provinceRepo "github.com/fsetiawan29/healthy_food/repository/province"
+	_userRepo "github.com/fsetiawan29/healthy_food/repository/user"
+
+	_foodUsecase "github.com/fsetiawan29/healthy_food/usecase/food"
+	_imageUsecase "github.com/fsetiawan29/healthy_food/usecase/image"
+	_provinceUsecase "github.com/fsetiawan29/healthy_food/usecase/province"
+	_userUsecase "github.com/fsetiawan29/healthy_food/usecase/user"
+
+	_foodHttpDeliver "github.com/fsetiawan29/healthy_food/delivery/http/food"
+	_imageHttpDeliver "github.com/fsetiawan29/healthy_food/delivery/http/image"
+	_provinceHttpDeliver "github.com/fsetiawan29/healthy_food/delivery/http/province"
+	_userHttpDeliver "github.com/fsetiawan29/healthy_food/delivery/http/user"
 )
 
 func init() {
@@ -77,20 +81,19 @@ func main() {
 	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 
 	userRepository := _userRepo.NewMysqlUserRepository(dbConn)
-	userUsecase := _userUsecase.NewUserUsecase(userRepository, timeoutContext)
-	_userHttpDeliver.NewUserHandler(e, userUsecase)
-
 	foodRepository := _foodRepo.NewMysqlFoodRepository(dbConn)
 	foodDetailRepository := _foodDetailRepo.NewMysqlFoodDetailRepository(dbConn)
 	imageRepository := _imageRepo.NewMysqlImageRepository(dbConn)
-	foodUsecase := _foodUsecase.NewFoodUsecase(foodRepository, foodDetailRepository, timeoutContext, imageRepository)
-	_foodHttpDeliver.NewFoodHandler(e, foodUsecase)
-
 	provinceRepository := _provinceRepo.NewMysqlProvinceRepository(dbConn)
-	provinceUsecase := _provinceUsecase.NewProvinceUsecase(provinceRepository, timeoutContext)
-	_provinceHttpDeliver.NewProvinceHandler(e, provinceUsecase)
 
+	userUsecase := _userUsecase.NewUserUsecase(userRepository, timeoutContext)
+	foodUsecase := _foodUsecase.NewFoodUsecase(foodRepository, foodDetailRepository, timeoutContext, imageRepository)
+	provinceUsecase := _provinceUsecase.NewProvinceUsecase(provinceRepository, timeoutContext)
 	imageUsecase := _imageUsecase.NewImageUsecase(imageRepository, timeoutContext)
+
+	_userHttpDeliver.NewUserHandler(e, userUsecase)
+	_foodHttpDeliver.NewFoodHandler(e, foodUsecase)
+	_provinceHttpDeliver.NewProvinceHandler(e, provinceUsecase)
 	_imageHttpDeliver.NewImageHandler(e, imageUsecase)
 
 	log.Fatal(e.Start(viper.GetString("server.address")))
