@@ -86,8 +86,14 @@ func main() {
 	imageRepository := _imageRepo.NewMysqlImageRepository(dbConn)
 	provinceRepository := _provinceRepo.NewMysqlProvinceRepository(dbConn)
 
-	userUsecase := _userUsecase.NewUserUsecase(userRepository, timeoutContext)
-	foodUsecase := _foodUsecase.NewFoodUsecase(foodRepository, foodDetailRepository, timeoutContext, imageRepository)
+	userUsecase := _userUsecase.NewUserUsecase(userRepository, timeoutContext, imageRepository)
+	foodUsecase := _foodUsecase.NewFoodUsecase(
+		foodRepository,
+		foodDetailRepository,
+		timeoutContext,
+		imageRepository,
+		provinceRepository,
+	)
 	provinceUsecase := _provinceUsecase.NewProvinceUsecase(provinceRepository, timeoutContext)
 	imageUsecase := _imageUsecase.NewImageUsecase(imageRepository, timeoutContext)
 

@@ -51,8 +51,7 @@ func (u *UserHandler) Login(c echo.Context) error {
 	}
 
 	var userParam models.User
-	err := c.Bind(&userParam)
-	if err != nil {
+	if err := c.Bind(&userParam); err != nil {
 		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
 	}
 

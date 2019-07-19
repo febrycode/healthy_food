@@ -8,6 +8,7 @@ import (
 
 type Repository interface {
 	GetAllProvince(ctx context.Context) (result []models.Province, err error)
+	GetProvinceByID(ctx context.Context, provinceID int64) (provinceData models.Province, err error)
 }
 
 type Usecase interface {

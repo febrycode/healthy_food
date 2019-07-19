@@ -8,6 +8,7 @@ import (
 	"github.com/fsetiawan29/healthy_food/domain/food"
 	"github.com/fsetiawan29/healthy_food/domain/food_detail"
 	"github.com/fsetiawan29/healthy_food/domain/image"
+	"github.com/fsetiawan29/healthy_food/domain/province"
 	"github.com/fsetiawan29/healthy_food/models"
 	"github.com/fsetiawan29/healthy_food/util"
 )
@@ -17,14 +18,23 @@ type Usecase struct {
 	foodDetailRepository food_detail.Repository
 	contextTimeout       time.Duration
 	imageRepository      image.Repository
+	provinceRepository   province.Repository
 }
 
-func NewFoodUsecase(f food.Repository, fd food_detail.Repository, timeout time.Duration, i image.Repository) food.Usecase {
+func NewFoodUsecase(
+	f food.Repository,
+	fd food_detail.Repository,
+	timeout time.Duration,
+	i image.Repository,
+	p province.Repository,
+) food.Usecase {
+
 	return &Usecase{
 		foodRepository:       f,
 		foodDetailRepository: fd,
 		contextTimeout:       timeout,
 		imageRepository:      i,
+		provinceRepository:   p,
 	}
 }
 
@@ -80,6 +90,15 @@ func (uc *Usecase) GetFood(ctx context.Context) (result []models.FoodResponse, e
 	}
 
 	for i, resultData := range result {
+		provinceData, err := uc.provinceRepository.GetProvinceByID(ctx, resultData.ProvinceID)
+		if err != nil {
+			return []models.FoodResponse{}, err
+		}
+
+		if provinceData.ID > 0 {
+			result[i].ProvinceName = provinceData.Name
+		}
+
 		foodDetailList, err := uc.foodDetailRepository.GetFoodDetailByReferenceID(ctx, resultData.ID)
 		if err != nil {
 			return []models.FoodResponse{}, err

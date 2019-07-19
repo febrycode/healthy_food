@@ -27,7 +27,8 @@ const (
 			reference_id,
 			name,
 			description,
-			created_at
+			COALESCE(created_at, timestamp '0001-01-01 00:00:00') as created_at,
+			COALESCE(updated_at, timestamp '0001-01-01 00:00:00') as updated_at
 		FROM
 			image
 		WHERE
@@ -52,7 +53,9 @@ const (
 			reference_type,
 			reference_id,
 			name,
-			description
+			description,
+			COALESCE(created_at, timestamp '0001-01-01 00:00:00') as created_at,
+			COALESCE(updated_at, timestamp '0001-01-01 00:00:00') as updated_at
 		FROM
 			image
 		WHERE

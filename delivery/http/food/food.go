@@ -34,6 +34,7 @@ func NewFoodHandler(e *echo.Echo, foodUsecase food.Usecase) {
 
 	r.Use(middleware.JWTWithConfig(config))
 	r.POST("", handler.CreateFood)
+	r.GET("", handler.GetFood)
 
 }
 
