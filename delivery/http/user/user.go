@@ -154,6 +154,15 @@ func (u *UserHandler) UpdateUser(c echo.Context) (err error) {
 		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
 	}
 
+	userData, err := u.userUsecase.GetUserByUserID(ctx, userID)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
+	}
+
+	if userData.ID <= 0 {
+		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
+	}
+
 	err = u.userUsecase.UpdateUser(ctx, userParam)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
