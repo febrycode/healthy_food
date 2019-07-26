@@ -67,9 +67,19 @@ func (f *FoodHandler) GetFood(c echo.Context) (err error) {
 		ctx = context.Background()
 	}
 
-	result, err := f.foodUsecase.GetFood(ctx)
-	if err != nil {
-		return err
+	var result []models.FoodResponse
+
+	title := c.QueryParam("title")
+	if title == "" {
+		result, err = f.foodUsecase.GetFood(ctx)
+		if err != nil {
+			return err
+		}
+	} else {
+		result, err = f.foodUsecase.GetFoodByTitle(ctx, title)
+		if err != nil {
+			return err
+		}
 	}
 
 	return c.JSON(http.StatusOK, result)

@@ -136,3 +136,66 @@ func (uc *Usecase) GetFood(ctx context.Context) (result []models.FoodResponse, e
 
 	return result, nil
 }
+
+func (uc *Usecase) GetFoodByTitle(ctx context.Context, title string) (result []models.FoodResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	foodList, err := uc.foodRepository.GetFoodByTitle(ctx, title)
+	if err != nil {
+		return []models.FoodResponse{}, err
+	}
+
+	for _, foodData := range foodList {
+		result = append(result, models.FoodResponse{
+			Food: foodData,
+		})
+	}
+
+	for i, resultData := range result {
+		provinceData, err := uc.provinceRepository.GetProvinceByID(ctx, resultData.ProvinceID)
+		if err != nil {
+			return []models.FoodResponse{}, err
+		}
+
+		if provinceData.ID > 0 {
+			result[i].ProvinceName = provinceData.Name
+		}
+
+		foodDetailList, err := uc.foodDetailRepository.GetFoodDetailByReferenceID(ctx, resultData.ID)
+		if err != nil {
+			return []models.FoodResponse{}, err
+		}
+
+		for _, foodDetailData := range foodDetailList {
+			if foodDetailData.ReferenceType == 1 {
+				result[i].Benefits = append(result[i].Benefits, models.Benefit{
+					ID:            foodDetailData.ID,
+					ReferenceType: foodDetailData.ReferenceType,
+					ReferenceID:   resultData.ID,
+					Description:   foodDetailData.Description,
+				})
+			}
+
+			if foodDetailData.ReferenceType == 2 {
+				result[i].Disadvantages = append(result[i].Disadvantages, models.Disadvantage{
+					ID:            foodDetailData.ID,
+					ReferenceType: foodDetailData.ReferenceType,
+					ReferenceID:   resultData.ID,
+					Description:   foodDetailData.Description,
+				})
+			}
+		}
+
+		imageList, err := uc.imageRepository.GetImageByReferenceID(ctx, resultData.ID)
+		if err != nil {
+			return []models.FoodResponse{}, err
+		}
+
+		for _, imageData := range imageList {
+			result[i].Images = append(result[i].Images, imageData)
+		}
+	}
+
+	return result, nil
+}

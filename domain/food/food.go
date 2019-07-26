@@ -9,9 +9,11 @@ import (
 type Repository interface {
 	CreateFood(ctx context.Context, foodData *models.Food) (result int64, err error)
 	GetFood(ctx context.Context) (foodList []models.Food, err error)
+	GetFoodByTitle(ctx context.Context, title string) (foodList []models.Food, err error)
 }
 
 type Usecase interface {
 	CreateFood(ctx context.Context, foodParam *models.FoodRequest) error
 	GetFood(ctx context.Context) (result []models.FoodResponse, err error)
+	GetFoodByTitle(ctx context.Context, title string) (result []models.FoodResponse, err error)
 }

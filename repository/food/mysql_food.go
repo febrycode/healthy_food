@@ -40,3 +40,12 @@ func (m *mysqlUserRepository) GetFood(ctx context.Context) (foodList []models.Fo
 
 	return foodList, nil
 }
+
+func (m *mysqlUserRepository) GetFoodByTitle(ctx context.Context, title string) (foodList []models.Food, err error) {
+	err = m.DB.SelectContext(ctx, &foodList, food.QueryGetListFoodByTitle, "%"+title+"%")
+	if err != nil {
+		return []models.Food{}, err
+	}
+
+	return foodList, nil
+}
