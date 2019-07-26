@@ -84,7 +84,7 @@ func (u *UserHandler) Login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
 	}
 
-	return c.JSON(http.StatusOK, models.ResponseToken(http.StatusOK, t))
+	return c.JSON(http.StatusOK, models.ResponseToken(http.StatusOK, t, user.IsAdmin))
 }
 
 func (u *UserHandler) Register(c echo.Context) (err error) {
