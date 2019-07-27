@@ -134,6 +134,20 @@ func (uc *Usecase) GetFood(ctx context.Context) (result []models.FoodResponse, e
 		}
 	}
 
+	for i, resultData := range result {
+		if len(resultData.Benefits) == 0 {
+			result[i].Benefits = []models.Benefit{}
+		}
+
+		if len(resultData.Disadvantages) == 0 {
+			result[i].Disadvantages = []models.Disadvantage{}
+		}
+
+		if len(resultData.Images) == 0 {
+			result[i].Images = []models.Image{}
+		}
+	}
+
 	return result, nil
 }
 
