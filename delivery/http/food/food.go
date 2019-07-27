@@ -46,7 +46,7 @@ func (f *FoodHandler) CreateFood(c echo.Context) (err error) {
 
 	foodParam := &models.FoodRequest{}
 	if err = c.Bind(foodParam); err != nil {
-		return err
+		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
 	}
 
 	user := c.Get("user").(*jwt.Token)
@@ -55,10 +55,10 @@ func (f *FoodHandler) CreateFood(c echo.Context) (err error) {
 	foodParam.UserID = claims.UserID
 	err = f.foodUsecase.CreateFood(ctx, foodParam)
 	if err != nil {
-		return err
+		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
 	}
 
-	return nil
+	return c.JSON(http.StatusCreated, models.ResponseJSON(http.StatusCreated, "Food created successfully"))
 }
 
 func (f *FoodHandler) GetFood(c echo.Context) (err error) {
