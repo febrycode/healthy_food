@@ -12,6 +12,7 @@ type Repository interface {
 	GetByUserID(ctx context.Context, userID int64) (models.User, error)
 	CreateUser(ctx context.Context, userData *models.User) error
 	UpdateUser(ctx context.Context, userData *models.User) error
+	GetListUser(ctx context.Context) (userList []models.User, err error)
 }
 
 type Usecase interface {
@@ -19,4 +20,5 @@ type Usecase interface {
 	GetUserByUserID(ctx context.Context, userID int64) (models.User, error)
 	CreateUser(ctx context.Context, userData *models.User) error
 	UpdateUser(ctx context.Context, userData *models.User) error
+	GetListUser(ctx context.Context) ([]models.User, error)
 }

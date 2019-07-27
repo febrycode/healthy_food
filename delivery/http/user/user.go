@@ -24,7 +24,8 @@ func NewUserHandler(e *echo.Echo, userUsecase user.Usecase) {
 		userUsecase: userUsecase,
 	}
 
-	e.GET("health_check", handler.HealthCheck)
+	e.GET("/health_check", handler.HealthCheck)
+	e.GET("/users", handler.GetListUser)
 	e.POST("/register", handler.Register)
 	e.POST("/login", handler.Login)
 
@@ -173,4 +174,18 @@ func (u *UserHandler) UpdateUser(c echo.Context) (err error) {
 
 func (u *UserHandler) HealthCheck(c echo.Context) error {
 	return c.JSON(http.StatusOK, "success")
+}
+
+func (u *UserHandler) GetListUser(c echo.Context) (err error) {
+	ctx := c.Request().Context()
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	userList, err := u.userUsecase.GetListUser(ctx)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
+	}
+
+	return c.JSON(http.StatusOK, userList)
 }

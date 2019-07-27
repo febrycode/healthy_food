@@ -99,3 +99,15 @@ func (uc *Usecase) UpdateUser(ctx context.Context, userData *models.User) error 
 
 	return nil
 }
+
+func (uc *Usecase) GetListUser(ctx context.Context) ([]models.User, error) {
+	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
+	defer cancel()
+
+	res, err := uc.userRepository.GetListUser(ctx)
+	if err != nil {
+		return []models.User{}, err
+	}
+
+	return res, nil
+}

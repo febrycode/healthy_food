@@ -58,3 +58,12 @@ func (m *mysqlUserRepository) UpdateUser(ctx context.Context, userData *models.U
 
 	return nil
 }
+
+func (m *mysqlUserRepository) GetListUser(ctx context.Context) (userList []models.User, err error) {
+	err = m.DB.SelectContext(ctx, &userList, user.QueryGetListUser)
+	if err != nil {
+		return []models.User{}, err
+	}
+
+	return userList, nil
+}

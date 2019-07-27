@@ -1,13 +1,29 @@
 package user
 
 const (
+	QueryGetListUser = `
+		SELECT
+			id,
+			email,
+			name,
+			address,
+			bio,
+			is_admin,
+			created_at,
+			COALESCE(updated_at, timestamp '0001-01-01 00:00:00') as updated_at
+		FROM
+			user
+		WHERE
+			is_admin = 0
+		ORDER BY
+			id DESC;
+	`
 	QueryGetUserByEmail = `
 		SELECT
 			id,
 			email,
 			password,
 			name,
-			avatar_url,
 			address,
 			bio,
 			is_admin,
@@ -40,7 +56,6 @@ const (
 				email,
 				password,
 				name,
-				avatar_url,
 				address,
 				bio,
 				created_at
@@ -50,7 +65,6 @@ const (
 				:email,
 				:password,
 				:name,
-				:avatar_url,
 				:address,
 				:bio,
 				:created_at
