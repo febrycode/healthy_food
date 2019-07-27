@@ -58,3 +58,13 @@ func (m *mysqlImageRepository) GetImageByReferenceID(ctx context.Context, refere
 
 	return imageList, nil
 }
+
+func (m *mysqlImageRepository) GetImageByReferenceIDRefType(ctx context.Context, referenceID int64, referenceType int) (imageList []models.Image, err error) {
+	err = m.DB.SelectContext(ctx, &imageList, image.QueryGetImageByReferenceIDRefType, referenceID, referenceType)
+	if err != nil && !models.IsErrorNoRows(err) {
+		logrus.Error(err)
+		return []models.Image{}, err
+	}
+
+	return imageList, nil
+}

@@ -61,4 +61,19 @@ const (
 		WHERE
 			reference_id = ?;
 	`
+
+	QueryGetImageByReferenceIDRefType = `
+		SELECT
+			id,
+			reference_type,
+			reference_id,
+			name,
+			description,
+			COALESCE(created_at, timestamp '0001-01-01 00:00:00') as created_at,
+			COALESCE(updated_at, timestamp '0001-01-01 00:00:00') as updated_at
+		FROM
+			image
+		WHERE
+			reference_id = ? AND reference_type = ?;
+	`
 )

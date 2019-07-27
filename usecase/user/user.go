@@ -45,6 +45,15 @@ func (uc *Usecase) GetUserByUserID(ctx context.Context, userID int64) (models.Us
 		return models.User{}, err
 	}
 
+	imageList, err := uc.imageRepository.GetImageByReferenceIDRefType(ctx, res.ID, 1)
+	if err != nil {
+		return models.User{}, err
+	}
+
+	if len(imageList) > 0 {
+		res.AvatarURL = imageList[0].Name
+	}
+
 	return res, nil
 }
 
