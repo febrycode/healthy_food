@@ -104,6 +104,9 @@ func (uc *Usecase) GetFood(ctx context.Context) (result []models.FoodResponse, e
 			return []models.FoodResponse{}, err
 		}
 
+		result[i].Benefits = make([]models.Benefit, 0)
+		result[i].Disadvantages = make([]models.Disadvantage, 0)
+
 		for _, foodDetailData := range foodDetailList {
 			if foodDetailData.ReferenceType == 1 {
 				result[i].Benefits = append(result[i].Benefits, models.Benefit{
@@ -129,22 +132,10 @@ func (uc *Usecase) GetFood(ctx context.Context) (result []models.FoodResponse, e
 			return []models.FoodResponse{}, err
 		}
 
+		result[i].Images = make([]models.Image, 0)
+
 		for _, imageData := range imageList {
 			result[i].Images = append(result[i].Images, imageData)
-		}
-	}
-
-	for i, resultData := range result {
-		if len(resultData.Benefits) == 0 {
-			result[i].Benefits = []models.Benefit{}
-		}
-
-		if len(resultData.Disadvantages) == 0 {
-			result[i].Disadvantages = []models.Disadvantage{}
-		}
-
-		if len(resultData.Images) == 0 {
-			result[i].Images = []models.Image{}
 		}
 	}
 
