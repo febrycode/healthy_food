@@ -98,6 +98,10 @@ func (u *UserHandler) Register(c echo.Context) (err error) {
 		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
 	}
 
+	if userParam.Password != userParam.PasswordConfirmation {
+		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Password and Password Confirmation doesn't match"))
+	}
+
 	user, err := u.userUsecase.GetUserByEmail(ctx, userParam.Email)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
