@@ -56,6 +56,14 @@ func (u *UserHandler) Login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
 	}
 
+	if userParam.Email == "" {
+		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Email can't be blank"))
+	}
+
+	if userParam.Password == "" {
+		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Password can't be blank"))
+	}
+
 	user, err := u.userUsecase.GetUserByEmail(ctx, userParam.Email)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
@@ -96,6 +104,18 @@ func (u *UserHandler) Register(c echo.Context) (err error) {
 	userParam := &models.User{}
 	if err = c.Bind(userParam); err != nil {
 		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
+	}
+
+	if userParam.Name == "" {
+		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Full Name can't be blank"))
+	}
+
+	if userParam.Email == "" {
+		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Email can't be blank"))
+	}
+
+	if userParam.Password == "" {
+		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Password can't be blank"))
 	}
 
 	if userParam.Password != userParam.PasswordConfirmation {
