@@ -70,11 +70,11 @@ func (u *UserHandler) Login(c echo.Context) error {
 	}
 
 	if user.ID <= 0 {
-		return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "Email is not valid", ""))
+		return c.JSON(http.StatusUnauthorized, models.ResponseToken(http.StatusUnauthorized, "Email is not valid", ""))
 	}
 
 	if !middlewareCustom.ComparePassword(user.Password, middlewareCustom.GetPassword(userParam.Password)) {
-		return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "Email and password is incorrect", ""))
+		return c.JSON(http.StatusUnauthorized, models.ResponseToken(http.StatusUnauthorized, "Email and password is incorrect", ""))
 	}
 
 	// Set custom claims
@@ -92,7 +92,7 @@ func (u *UserHandler) Login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "Bad Request", ""))
 	}
 
-	return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "", t))
+	return c.JSON(http.StatusOK, models.ResponseToken(http.StatusOK, "", t))
 }
 
 func (u *UserHandler) Register(c echo.Context) (err error) {
