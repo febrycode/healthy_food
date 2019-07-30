@@ -11,8 +11,8 @@ type ResponseErrorData struct {
 
 type ResponseTokenData struct {
 	Code    int    `json:"code"`
+	Message string `json:"message"`
 	Token   string `json:"token"`
-	IsAdmin bool   `json:"is_admin"`
 }
 
 type ResponseImageData struct {
@@ -29,11 +29,11 @@ func ResponseJSON(code int, message string) ResponseError {
 	}
 }
 
-func ResponseToken(code int, token string, is_admin bool) ResponseTokenData {
+func ResponseToken(code int, message, token string) ResponseTokenData {
 	return ResponseTokenData{
 		code,
+		message,
 		token,
-		is_admin,
 	}
 }
 

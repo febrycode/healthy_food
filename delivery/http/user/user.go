@@ -53,28 +53,28 @@ func (u *UserHandler) Login(c echo.Context) error {
 
 	var userParam models.User
 	if err := c.Bind(&userParam); err != nil {
-		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
+		return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "Bad Request", ""))
 	}
 
 	if userParam.Email == "" {
-		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Email can't be blank"))
+		return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "Email can't be blank", ""))
 	}
 
 	if userParam.Password == "" {
-		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Password can't be blank"))
+		return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "Password can't be blank", ""))
 	}
 
 	user, err := u.userUsecase.GetUserByEmail(ctx, userParam.Email)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
+		return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "Bad Request", ""))
 	}
 
 	if user.ID <= 0 {
-		return c.JSON(http.StatusUnauthorized, models.ResponseJSON(http.StatusUnauthorized, "Email is not valid"))
+		return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "Email is not valid", ""))
 	}
 
 	if !middlewareCustom.ComparePassword(user.Password, middlewareCustom.GetPassword(userParam.Password)) {
-		return c.JSON(http.StatusUnauthorized, models.ResponseJSON(http.StatusUnauthorized, "Email and password is incorrect"))
+		return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "Email and password is incorrect", ""))
 	}
 
 	// Set custom claims
@@ -89,10 +89,10 @@ func (u *UserHandler) Login(c echo.Context) error {
 	// Generate encoded token and send it as response.
 	t, err := token.SignedString([]byte("secret"))
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, models.ResponseJSON(http.StatusBadRequest, "Bad Request"))
+		return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "Bad Request", ""))
 	}
 
-	return c.JSON(http.StatusOK, models.ResponseToken(http.StatusOK, t, user.IsAdmin))
+	return c.JSON(http.StatusBadRequest, models.ResponseToken(http.StatusBadRequest, "", t))
 }
 
 func (u *UserHandler) Register(c echo.Context) (err error) {
